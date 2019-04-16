@@ -8,9 +8,9 @@ import edu.vandy.simulator.managers.palantiri.Palantir;
  * This class implements the gazing logic for a being that's
  * implemented via a Java thread.
  */
-public class SimpleBeingRunnable 
-       extends Being
-       implements Runnable {
+public class SimpleBeingRunnable
+        extends Being
+        implements Runnable {
     /**
      * Constructor initializes the field.
      *
@@ -48,5 +48,16 @@ public class SimpleBeingRunnable
         // for this being via a call to the appropriate Being super
         // class helper method.
         // TODO -- you fill in here.
+        try{
+            Palantir palantir = acquirePalantir();
+            if(palantir == null){
+                error(new IllegalStateException());
+            }
+            palantir.gaze(this);
+            releasePalantir(palantir);
+        }catch (Exception e){
+            error(e.toString());
+        }
     }
 }
+
