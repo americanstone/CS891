@@ -83,8 +83,8 @@ public class RunnableThreadsMgr
         // (though they are free to do to if they choose).
         //
         // TODO -- you fill in here.
-        mBeingThreads = (getBeings().stream().map(run -> {
-            Thread th = new Thread(run);
+        mBeingThreads = (getBeings().stream().map(being -> {
+            Thread th = new Thread(being);
 
             th.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
                 @Override

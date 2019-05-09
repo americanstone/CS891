@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.Semaphore;
 
 import edu.vandy.simulator.managers.palantiri.Palantir;
@@ -31,20 +33,20 @@ public class SpinLockHashMapMgr
      * critical section.
      */
     // TODO -- you fill in here.
-
+    CancellableLock mLock;
     /**
      * A counting Semaphore that limits concurrent access to the fixed
      * number of available palantiri managed by the PalantiriManager.
      */
     // TODO -- you fill in here.
-
+    Semaphore mSemaphore;
     /**
      * @return The "spin lock" instance.
      */
     public CancellableLock getSpinLock() {
         // TODO -- you fill in here, replacing null with the proper
         // code.
-        return null;
+        return mLock;
     }
 
     /**
@@ -53,7 +55,7 @@ public class SpinLockHashMapMgr
     public Semaphore getAvailablePalantiri() {
         // TODO -- you fill in here, replacing null with the proper
         // code.
-        return null;
+        return mSemaphore;
     }
 
     /**
@@ -62,7 +64,7 @@ public class SpinLockHashMapMgr
     public HashMap<Palantir, Boolean> getPalantiriMap() {
         // TODO -- you fill in here, replacing null with the proper
         // code.
-        return null;
+        return mPalantiriMap;
     }
 
     /**
@@ -72,16 +74,18 @@ public class SpinLockHashMapMgr
     @Override
     protected void buildModel() {
         // Create a new HashMap.
-        mPalantiriMap = new HashMap<>();
+        mPalantiriMap = new HashMap<>();// the data structure is not threadsafe
 
         // Iterate through the List of Palantiri returned via the
         // getPalantiri() factory method and initialize each key in
         // the mPalantiriMap with "true" to indicate it's available.
         // TODO -- you fill in here.
+        getPalantiri().forEach(palantiri -> mPalantiriMap.put(palantiri, true));
 
         // Initialize the Semaphore to use a "fair" implementation
         // that mediates concurrent access to the given Palantiri.
         // TODO -- you fill in here.
+        mSemaphore = new Semaphore(getPalantirCount(), true);
 
         if (Assignment.isUndergraduateTodo()) {
             // UNDERGRADUATES:
@@ -93,6 +97,7 @@ public class SpinLockHashMapMgr
             // to UNDERGRADUATE in the edu.vandy.simulator.utils.Assignment.
 
             // TODO -- you fill in here.
+            mLock = new SpinLock();
         } else if (Assignment.isGraduateTodo()) {
             // GRADUATES:
             //
@@ -103,6 +108,7 @@ public class SpinLockHashMapMgr
             // to GRADUATE in the edu.vandy.simulator.utils.Assignment.
 
             // TODO -- you fill in here.
+            mLock = new ReentrantSpinLock();
         } else {
             throw new IllegalStateException("Invalid assignment type");
         }
@@ -125,17 +131,35 @@ public class SpinLockHashMapMgr
         // isn't available, return that palantir to the client, and
         // release the spin-lock.
         // TODO -- you fill in here.
+        mSemaphore.acquire();
+        // if pass this stage, there muse be an available Palantir in the map because of semaphore guard the resources
+        try{
+            // only one thread enter the critical section
+            mLock.lock(()->false);
+            Optional<Map.Entry<Palantir, Boolean>> availablePalantirEntry = mPalantiriMap.entrySet().stream().filter(Map.Entry::getValue).findAny();
 
-        // This invariant should always hold for all acquire()
-        // implementations if implemented correctly. That is the
-        // purpose of enforcing the @NotNull along with the
-        // CancellationException; It makes it clear that all
-        // implementations should either be successful (if implemented
-        // correctly) and return a Palantir, or fail because of
-        // cancellation.
-        throw new IllegalStateException("This method should either return a valid " +
-                "Palantir or throw a CancellationException. " +
-                "In either case, this statement should not be reached.");
+            Map.Entry<Palantir, Boolean> pair = availablePalantirEntry.get();
+
+            // set this palantir is not avaiable
+            pair.setValue(false);
+
+            return  pair.getKey();
+
+        }catch (Exception e){
+            // This invariant should always hold for all acquire()
+            // implementations if implemented correctly. That is the
+            // purpose of enforcing the @NotNull along with the
+            // CancellationException; It makes it clear that all
+            // implementations should either be successful (if implemented
+            // correctly) and return a Palantir, or fail because of
+            // cancellation.
+            throw new IllegalStateException("This method should either return a valid " +
+                    "Palantir or throw a CancellationException. " +
+                    "In either case, this statement should not be reached.");
+        }
+        finally {
+            mLock.unlock();
+        }
     }
 
     /**
@@ -150,6 +174,14 @@ public class SpinLockHashMapMgr
         // in a thread-safe manner and release the Semaphore if all
         // works properly.
         // TODO -- you fill in here.
+       if(palantir != null){
+           mLock.lock(() -> false);
+           Boolean exist = mPalantiriMap.put(palantir, true);
+           mLock.unlock();
+           // a palantir avaliable now. order matters
+           mSemaphore.release();
+
+       }
     }
 
     /**
@@ -162,7 +194,7 @@ public class SpinLockHashMapMgr
     protected int availablePermits() {
         // TODO -- you fill in here, replacing -1 with the proper
         // code.
-        return -1;
+        return mSemaphore.availablePermits();
     }
 
     /**

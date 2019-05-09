@@ -24,9 +24,9 @@ class Assignment_1B_IntegratedTest {
     @Rubric(value = "normalTest", goal = "The goal of this evaluation is to ensure that your implementation " +
             "runs correctly with 10 beings, 6 palantiri, 10 iterations and a " +
             "gazing delay of 0 to 50 milliseconds.", reference = arrayOf("https://www.youtube.com/watch?v=WxpjEXt7J0g&index=6&list=PLZ9NgFYEMxp4p5piHxajQXRRlsyDCLvI3&t=15s", "https://www.youtube.com/watch?v=8Ij9Q4AGfgc&list=PLZ9NgFYEMxp4p5piHxajQXRRlsyDCLvI3&index=7", "https://www.youtube.com/watch?v=GdrXGs2Ipp4&index=8&list=PLZ9NgFYEMxp4p5piHxajQXRRlsyDCLvI3"))
-    @Test(timeout = 5000)
+    @Test(timeout = 500000)
     fun normalTest() {
-        Controller.setLogging(false)
+        Controller.setLogging(true)
 
         TestHelper.testStrategy(
                 beingManager,
