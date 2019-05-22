@@ -8,22 +8,23 @@ import java.util.function.Supplier;
  * This class emulates a "compare and swap"-style spin lock with
  * non-recursive semantics.
  */
-class SpinLock 
-      implements CancellableLock {
+class SpinLock
+        implements CancellableLock {
     /**
      * Define an AtomicBoolean that's used as the basis for an atomic
      * compare-and-swap.  The default state of the spinlock should be
      * "unlocked".
      */
     // TODO -- you fill in here.
-
+    // CAN't be final due to the unit test InjectMocks framework can not injection final
+    AtomicBoolean mAtomicBoolean = new AtomicBoolean();
     /**
      * @return The AtomicBoolean used for compare-and-swap.
      */
     public AtomicBoolean getOwner() {
         // TODO -- you fill in here, replacing null with the proper
         // code.
-        return null;
+        return mAtomicBoolean;
     }
 
     /**
@@ -38,7 +39,8 @@ class SpinLock
         // current value is false.
         // TODO -- you fill in here, replacing false with the proper
         // code.
-        return false;
+
+        return getOwner().compareAndSet(false, true);
     }
 
     /**
@@ -54,12 +56,24 @@ class SpinLock
      */
     @Override
     public void lock(Supplier<Boolean> isCancelled)
-        throws CancellationException {
+            throws CancellationException {
         // Loop trying to set mOwner's value to true, which succeeds
         // iff its current value is false.  Each iteration should also
         // check if a shutdown has been requested and if so throw a
         // cancellation exception.
         // TODO -- you fill in here.
+//        do{
+//            if (isCancelled.get()){
+//               throw  new CancellationException();
+//            }
+//
+//        }while (!getOwner().compareAndSet(false, true));
+
+        while(!getOwner().compareAndSet(false, true)){
+            if (isCancelled.get()){
+                throw  new CancellationException();
+            }
+        }
     }
 
     /**
@@ -70,5 +84,6 @@ class SpinLock
         // Atomically release the lock that's currently held by
         // mOwner.
         // TODO -- you fill in here.
+        getOwner().compareAndSet(true, false);
     }
 }
