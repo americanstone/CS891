@@ -132,7 +132,7 @@ public class Assignment_2A_ExecutorServiceMgrTest {
     /**
      * Test for GRADUATE use of Java 8 Streams.
      */
-    @Test(timeout = 4000)
+    @Test(timeout = 4000000)
     public void testBeginBeingThreadPoolGraduate() {
         if (!Assignment.testType(Assignment.GRADUATE)) {
             System.out.println("Skipping testBeginBeingThreadPoolGraduate (graduate only test)");
@@ -201,7 +201,7 @@ public class Assignment_2A_ExecutorServiceMgrTest {
     /**
      * Test for GRADUATE use of Java 8 Streams.
      */
-    @Test(timeout = 4000)
+    @Test(timeout = 400)
     public void testAwaitCompletionOfFuturesGraduate() throws Exception {
         if (!Assignment.testType(Assignment.GRADUATE)) {
             System.out.println("Skipping testAwaitCompletionOfFuturesGraduate (graduate only test)");

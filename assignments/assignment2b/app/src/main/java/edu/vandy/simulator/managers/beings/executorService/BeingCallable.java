@@ -9,9 +9,9 @@ import edu.vandy.simulator.managers.palantiri.Palantir;
 /**
  * This class implements the gazing logic of a Being.
  */
-class BeingCallable 
-      extends Being
-      implements Callable<BeingCallable> {
+class BeingCallable
+        extends Being
+        implements Callable<BeingCallable> {
     /**
      * Constructor initializes the field.
      *
@@ -33,7 +33,7 @@ class BeingCallable
         runGazingSimulation(getGazingIterations());
 
         // TODO -- replace "null" with the appropriate return value.
-        return null;
+        return this;
     }
 
     /**
@@ -52,5 +52,15 @@ class BeingCallable
         // a call to the appropriate base class helper method.
 
         // TODO -- you fill in here.
+        try{
+            Palantir palantir = acquirePalantir();
+            if(palantir == null){
+                error(new IllegalStateException());
+            }
+            palantir.gaze(this);
+            releasePalantir(palantir);
+        }catch (Exception e){
+            error(e.toString());
+        }
     }
 }

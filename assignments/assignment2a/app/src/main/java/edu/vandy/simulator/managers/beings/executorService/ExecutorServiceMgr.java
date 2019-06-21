@@ -115,7 +115,8 @@ public class ExecutorServiceMgr
         // ExecutorService, and add it to the list of BeingCallable
         // futures.
         // TODO -- you fill in here.
-        mExecutorService = createExecutorService(getBeingCount());
+        mExecutorService = createExecutorService(getBeings().size());
+
 
         // GRADUATE STUDENTS:
         // Use a Java 8 stream to submit each BeingCallable and
@@ -165,22 +166,26 @@ public class ExecutorServiceMgr
         // TODO -- you fill in here.
 
         if (Assignment.isUndergraduateTodo()) {
-            mBeingCallables.forEach(b -> {
+
+            for( Future<BeingCallable> f : mBeingCallables){
                 try {
-                    b.get();
-                } catch (ExecutionException | InterruptedException e) {
-                    Controller.log(TAG,  e);
+                    f.get();
+                    beingCount++;
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            });
+            }
         } else if (Assignment.isGraduateTodo()) {
-            mBeingCallables.stream().map(c -> {
+            beingCount = mBeingCallables.stream().map(c -> {
                 try {
-                    return c.get();
+                    c.get();
                 } catch (ExecutionException | InterruptedException e) {
                     Controller.log(TAG,  e);
                 }
-                return null;
-            }).collect(Collectors.toList());
+                return 1;
+            }).count();
         } else {
             throw new IllegalStateException("Invalid assignment type");
         }
@@ -211,7 +216,7 @@ public class ExecutorServiceMgr
         // canceled.
         // TODO -- you fill in here.
        mBeingCallables.forEach(b -> {
-           if(b.isCancelled() || !b.isDone()){
+           if(!b.isCancelled() || !b.isDone()){
                b.cancel(true);
            }
        });

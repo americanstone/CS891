@@ -4,9 +4,11 @@ import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -44,12 +46,13 @@ public class ReentrantLockHashMapSimpleSemaphoreMgr extends PalantiriManager {
      * PalantiriManager.
      */
     // TODO -- you fill in here.
+    SimpleSemaphore mSimleSemaphore;
 
     /**
      * A Lock used to protect critical sections involving the HashMap.
      */
     // TODO -- you fill in here.
-
+    ReentrantLock mReentrantLock;
     /**
      * Resets the fields to their initial values
      * and tells all beings to reset themselves.
@@ -69,7 +72,7 @@ public class ReentrantLockHashMapSimpleSemaphoreMgr extends PalantiriManager {
     SimpleSemaphore getSemaphore() {
         // TODO -- you fill in here, replacing null with the
         // appropriate field.
-        return null;
+        return mSimleSemaphore;
     }
 
     /**
@@ -96,11 +99,17 @@ public class ReentrantLockHashMapSimpleSemaphoreMgr extends PalantiriManager {
 
         // Undergraduate students are free to use a Java 8 stream, but
         // it's not required.
-
+        mPalantiriMap = new HashMap<>();
         if (Assignment.isUndergraduateTodo()) {
             // TODO -- you fill in here.
+            mPalantiriMap = getPalantiri().stream().collect(toMap(Function.identity(), v -> true));
+            mSimleSemaphore = new SimpleSemaphore(getPalantirCount());
+            mReentrantLock = new ReentrantLock(true);
         } else if (Assignment.isGraduateTodo()) {
             // TODO -- you fill in here.
+            mPalantiriMap = getPalantiri().stream().collect(toMap(Function.identity(), v -> true));
+            mSimleSemaphore = new SimpleSemaphore(getPalantirCount());
+            mReentrantLock = new ReentrantLock(true);
         } else {
             throw new IllegalStateException("Invalid assignment type");
         }
@@ -132,8 +141,41 @@ public class ReentrantLockHashMapSimpleSemaphoreMgr extends PalantiriManager {
 
         if (Assignment.isUndergraduateTodo()) {
             // TODO -- you fill in here.
+            mSimleSemaphore.acquire();
+            try{
+
+
+                Optional<Palantir> availablePalantir = mPalantiriMap.entrySet().stream()
+                        .filter(Map.Entry::getValue)
+                        .map(Map.Entry::getKey)
+                        .findFirst();
+                        //.orElse(new Palantir(this));// shouldn't go here since the Semaphore guard the resource
+
+                mReentrantLock.lockInterruptibly();
+
+                mPalantiriMap.put(availablePalantir.get(), false);
+
+                return availablePalantir.get();
+            }finally {
+                mReentrantLock.unlock();
+            }
         } else if (Assignment.isGraduateTodo()) {
             // TODO -- you fill in here.
+            mSimleSemaphore.acquire();
+            try{
+                mReentrantLock.lockInterruptibly();
+
+                Palantir availablePalantir = mPalantiriMap.entrySet().stream()
+                        .filter(Map.Entry::getValue)
+                        .map(Map.Entry::getKey)
+                        .findFirst()
+                        .orElse(new Palantir(this));// shouldn't go here since the Semaphore guard the resource
+                mPalantiriMap.put(availablePalantir, false);
+
+                return availablePalantir;
+            }finally {
+                mReentrantLock.unlock();
+            }
         } else {
             throw new IllegalStateException("Invalid assignment type");
         }
@@ -145,9 +187,9 @@ public class ReentrantLockHashMapSimpleSemaphoreMgr extends PalantiriManager {
         // implementations should either be successful (if implemented
         // correctly) and return a Palantir, or fail because of
         // cancellation.
-        throw new IllegalStateException("This method should either return a valid "
-                                        + "Palantir or throw a InterruptedException. "
-                                        + "In either case, this statement should not be reached.");
+//        throw new IllegalStateException("This method should either return a valid "
+//                                        + "Palantir or throw a InterruptedException. "
+//                                        + "In either case, this statement should not be reached.");
     }
 
     /**
@@ -163,6 +205,13 @@ public class ReentrantLockHashMapSimpleSemaphoreMgr extends PalantiriManager {
         // in a thread-safe manner and release the SimpleSemaphore if
         // all works properly.
         // TODO -- you fill in here.
+        try{
+            mReentrantLock.lock();
+            mPalantiriMap.put(palantir, true);
+           mSimleSemaphore.release();
+        } finally {
+            mReentrantLock.unlock();
+        }
     }
 
     /**
@@ -174,7 +223,7 @@ public class ReentrantLockHashMapSimpleSemaphoreMgr extends PalantiriManager {
     @Override
     protected int availablePermits() {
         // TODO -- replace 0 with the appropriate method call.
-        return 0;
+        return mSimleSemaphore.availablePermits();
     }
 
     /**
