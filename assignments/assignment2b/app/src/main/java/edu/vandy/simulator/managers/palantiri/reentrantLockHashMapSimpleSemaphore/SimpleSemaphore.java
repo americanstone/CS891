@@ -82,11 +82,8 @@ public class SimpleSemaphore {
         try{
             lock.lock();
             while(mPermits == 0)
-                notEmpty.await();
+                notEmpty.awaitUninterruptibly();
             mPermits = mPermits-1;
-        }catch (InterruptedException e){
-            acquireUninterruptibly();
-            lock.unlock();
         }
         finally {
             lock.unlock();
@@ -103,6 +100,8 @@ public class SimpleSemaphore {
         try {
             lock.lockInterruptibly();
             mPermits = mPermits + 1;
+            notEmpty.signal();
+            //notEmpty.signalAll();
         }catch (InterruptedException e){
             lock.unlock();
         }finally {

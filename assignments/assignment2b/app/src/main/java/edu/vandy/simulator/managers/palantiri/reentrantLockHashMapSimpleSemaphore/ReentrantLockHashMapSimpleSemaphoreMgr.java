@@ -143,13 +143,12 @@ public class ReentrantLockHashMapSimpleSemaphoreMgr extends PalantiriManager {
             // TODO -- you fill in here.
             mSimleSemaphore.acquire();
             try{
+                mReentrantLock.lockInterruptibly();
                 Palantir availablePalantir = mPalantiriMap.entrySet().stream()
                         .filter(Map.Entry::getValue)
                         .map(Map.Entry::getKey)
                         .findFirst()
                         .orElse(new Palantir(this));// shouldn't go here since the Semaphore guard the resource
-
-                mReentrantLock.lockInterruptibly();
 
                 mPalantiriMap.put(availablePalantir, false);
 
