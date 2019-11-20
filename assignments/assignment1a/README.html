@@ -1,53 +1,81 @@
 <html>
 
-<title>Java Threads (Assignment 1 - Part A)</title>
+<title>Array (Assignment 1a)</title>
 
-<BODY text = "#000000"
-link="#000fff"
-vlink="#ff0f0f"
-bgcolor="#ffffff">
+<body text = "#000000"
+      link="#000fff"
+      vlink="#ff0f0f"
+      bgcolor="#ffffff">
 
-<HR>
-<h3>Java Threads (Assignment 1 - Part A)</h3>
+  <hr>
+  <h3>Array (Assignment 1a)</h3>
 
-<HR width=50% align=left>
-<H4>Objectives and Overview of the Assignment</H4>
+  <p>The objective of the first part of this two-part assignment is to
+    give you experience using Android Studio to develop and test an
+    implementation of an Array interface written using Java's
+    object-oriented features.  It's important that your Array
+    implementation work properly since variants of it are required by
+    all subsequent assignments in this course.</p>
 
-<P>The objectives of Part A of this assignment are to learn how to
-create, start, and join Java threads.  Videos explaining the
-structure, functionality, and usage of Java threads appear <A
-HREF="https://www.youtube.com/watch?v=WxpjEXt7J0g&index=6&list=PLZ9NgFYEMxp4p5piHxajQXRRlsyDCLvI3&t=15s">here</a>,
-<A
-HREF="https://www.youtube.com/watch?v=8Ij9Q4AGfgc&list=PLZ9NgFYEMxp4p5piHxajQXRRlsyDCLvI3&index=7">here</a>,
-and <A
-HREF="https://www.youtube.com/watch?v=GdrXGs2Ipp4&index=8&list=PLZ9NgFYEMxp4p5piHxajQXRRlsyDCLvI3">here</a>.
-I recommend you watch these videos to ensure you understand how to
-program Java threads.  Naturally, we'll cover these topics in class,
-as well. </P>
+  <p> The code you'll write for this assignment has a GUI and runs as
+    an Android app. Please feel free to use this app to help debug your
+    solution. </p>
 
-<P>In this part of the assignment you will use the Java threads to
-create a working Android app called PalantiriSimulator.  This app
-contains a resource manager that restricts the number of beings from
-Middle-Earth who can concurrently gaze into a fixed number of
-palantiri.  If you're not yet a fan of Tolkien's Lord of the Ring's
-trilogy, you can learn more about palantiri <A
-HREF="http://en.wikipedia.org/wiki/Palantir">here</a>.</P>
+  <p> The following resources may be helpful in completing this
+    assignment: </p>
+
+  <ul> <li><a
+    href="http://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html">java.utils.Arrays
+    documentation</A>, which provides certain useful methods for your Array implementation.</li> <li><a
+    href="http://docs.oracle.com/javase/tutorial/">The Oracle Java
+    Tutorial</a>, which provides a good overview of Java's object-oriented features.</li> </ul>
+
+  <p> If your Java knowledge is rusty you might consider watching the
+  videos in our Coursera <A
+  HREF="https://www.coursera.org/learn/java-for-android/">Java for
+  Android</A> MOOC. </p>
+
+  <h4>Getting Started</h4>
+
+  <p>
+    Before you start with Assignment 1a you'll need to do the following
+    things:
+  </p>
+
+  <ul>
+    <li>
+      Download and install Android Studio. Instructions for
+      doing this are available <a href="https://github.com/douglascraigschmidt/CS891/wiki/Installing-Software">here</a>.
+    </li>
+
+    <li>
+      Setup an account on <a href="https://about.gitlab.com/">GitLab</a>, which is also explained <a href="https://github.com/douglascraigschmidt/CS891/wiki/Installing-Software">here</a>.
+    </li>
+  </ul>
 
 <HR width=50% align=left>
 <H4>Assignment Structure and Functionality</H4>
 
-<P>The PalantiriSimulator app is packaged as a project in Android
-Studio version 3.2.x.  This app is written in both Kotlin and Java and
+<P>The ImageCrawler app is packaged as a project in Android Studio
+version 3.4.  This app is written in both Kotlin and Java and
 demonstrates <EM>many</EM> Android capabilities.  For the purposes of
-this assignment, however, you just need to focus on the following
-directory at this point:</P>
+Assignment 1a, however, you only need to be aware of the following
+three directories:
 
-<UL> 
+<UL>
 
-<LI> <A HREF="
-app/src/main/java/edu/vandy/simulator/managers/beings/runnableThreads/">app/src/main/java/edu/vandy/simulator/managers/beings/runnableThreads</A>,
-which contains the skeleton(s) you'll need to fill in, as described <A
-HREF="#description">below</A>.
+<LI> <A HREF="image-crawler/src/main/java/edu/vanderbilt/imagecrawler/utils/">image-crawler/src/main/java/edu/vanderbilt/imagecrawler/utils</A>,
+which contains the skeleton(s) you'll need to fill in, as
+described <A HREF="#description">below</A>. <P>
+
+<LI> <A HREF="app/src/test">app/src/test</A>, which is a set of JUnit
+tests that exercise the features under test and can be used to
+evaluate whether you've correctly satisfied this assignment's
+requirements. <P>
+
+<LI> <A HREF="app/src/androidTest">app/src/androidTest</A>, which is
+an Android Studio instrumentation test that runs your app
+automatically.  <P>
 
 </UL>
 
@@ -55,25 +83,21 @@ HREF="#description">below</A>.
 project.  You can run this project by clicking the green "Run 'app'"
 button in the Android Studio IDE, which should automatically select an
 Android Emulator to run, assuming you have one created. The
-application's minimum API is 24, so you will need to select an
-emulator that uses an API >= 24. If you do not already have one
-created you can create it by clicking on the "AVD Manager" button in
-the Android Studio IDE.</>
+application's minimum API is 26, so you will need to select an
+emulator that uses an API >= 26, though I recommend you use API 28. If
+you do not already have one created you can create it by clicking on
+the "AVD Manager" button in the Android Studio IDE.</P>
 
 <HR width=50% align=left>
 <A name="description">
 <H4>Program Description and "TODO" Tasks</H4>
 
-<P>Nested within the <A HREF="app/src/main">app/src/main</A> directory
-you'll find many folders and files, most of which you can ignore.  In
-particular, this Android program is structured in accordance with the
-<A
-HREF="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter">Model-View-Presenter</A>
-(MVP) pattern.  Most classes are already provided for you.  The
-relevant concurrent processing is performed in the Model layer.  If
-you correctly complete the implementation of skeleton(s) in the Model
-layer the app should successfully run to completion without throwing
-any exceptions.</P>
+  <p> An Array is an abstract data type (ADT) implemented via a single
+    contiguous buffer that provides operations like get(), set(),
+    add(), remove(), and size(). Your task is to implement a generic
+    Array class in Java.  This class will be different from Java
+    built-in arrays in various ways, e.g., it can be resized and used
+    in conjunction with other Java Collection Framework classes. </p>
 
 <P>You'll need to modify several files containing the skeleton Java
 code by completing the "TODO - You fill in here" tasks to provide a
@@ -81,97 +105,68 @@ working solution.  DO NOT CHANGE THE OVERALL STRUCTURE OF THE SKELETON
 - just fill in the "TODO" tasks!!!  In particular, you'll need to
 finish implementing the following "TODO" tasks for this assignment in
 the <A
-HREF="app/src/main/java/edu/vandy/simulator/managers/beings/runnableThreads">app/src/main/java/edu/vandy/simulator/managers/beings/runnableThreads</A>
+HREF="image-crawler/src/main/java/edu/vanderbilt/imagecrawler/utils/">utils</A>
 folder: </P>
 
 <UL>
 
 <LI> <P><A
-HREF="app/src/main/java/edu/vandy/simulator/managers/beings/runnableThreads/RunnableThreadsMgr.java">app/src/main/java/edu/vandy/simulator/managers/beings/runnableThreads/RunnableThreadsMgr.java</A>.
-You'll need to complete the "TODO" tasks in (1) the
-<CODE>newBeing()</CODE> method, which is a factory method that returns
-a new SimpleBeingRunnableInstance, (2) the
-<CODE>runSimulation()</CODE> method, which calls a method to
-create/start a thread for each being, and then calls another method to
-start a thread to wait for all the being threads to finished, and then
-blocks until the waiter thread has finished, (3) the
-<CODE>beginBeingThreads()</CODE> method, which creates/starts a list
-of threads that represent the beings in this simulation, and (4) the
-<CODE>waitForBeingThreads()</CODE> method, which starts a thread to
-wait for all the being threads to finish and returns that thread to
-the caller. </P>
+HREF="image-crawler/src/main/java/edu/vanderbilt/imagecrawler/utils/UnsynchronizedArray.java">UnsynchronizedArray.java</A>.
+You'll need to complete the "TODO" tasks in various methods to
+implement the Array interface. </P>
 
 <LI> <A
-HREF="app/src/main/java/edu/vandy/simulator/managers/beings/runnableThreads/SimpleBeingRunnable.java">app/src/main/java/edu/vandy/simulator/managers/beings/runnableThreads/SimpleBeingRunnable.java</A>. You'll
-need to complete the "TODO" tasks in (1) the
-<CODE>acquirePalantirAndGaze()</CODE> method, which performs a single
-gazing operation.
-
-<LI> <A HREF="app/src/test">app/src/test</A>, which contains a set of
-unit tests that exercise many PalantiriSimulator features and can be
-used to help test the functionality you implement for the
-assignment. <P>
-
-<LI> <A HREF="app/src/androidTest">app/src/androidTest</A>, which
-contains an Android Studio instrumentation test that runs your app
-automatically.  <P> </UL>
-
-<P>Your app will be considered correct if it passes all the unit and
-instrumentation tests and all beings successfully complete all their N
-iterations. A correct simulation should restrict the number of gazing
-beings to the number of palantiri.  In other words, if there are four
-palantiri in the simulation, then only four beings should ever be
-``gazing'' on the screen at a time.</P>
-
-<P>When the simulation is running, the app view will display visual
-feedback to show palantiri and being states, as well as the progress
-of their gazing iterations.  If your assignment implementation is
-correct and does not throw any exceptions the app title bar labels
-will appear green when the simulation completes. If the implementation
-throws an exception or is not implemented correctly when the
-simulation completes the red title bar labels will be displayed when
-the simulation completes.</P>
-
-<HR width=50% align=left>
-<A NAME="gradwork">
-<H4>Additional "TO DO" Tasks for Graduate Students</H4>
-
-<P>Graduate students (or students who are taking this course for graduate
-credit) must perform the following additional task(s):</P>
-
-<UL>
-
-<LI> Enhance the beginBeingThreads() method in <A
-HREF="app/src/main/java/edu/vandy/simulator/managers/beings/runnableThreads/RunnableThreadsMgr.java">app/src/main/java/edu/vandy/simulator/managers/beings/runnableThreads/RunnableThreadsMgr.java</A>
-to set an "UncaughtExceptionHandler" that calls the
-BeingManager.error() to indicate an unexpected exception "ex" occurred
-for thread "thr".
+HREF="app/src/main/java/edu/vandy/simulator/utils/Assignment.java">Assignment.java</A>.
+You'll need to complete the "TODO" to set the <CODE>sTypes</CODE>
+field to either <CODE>GRADUATE</CODE> or <CODE>UNDERGRADUATE</CODE>,
+depending on which version of the assignment that you're
+implementing.</LI>
 
 </UL>
 
-<P>Undergraduates are welcome to implement these methods/features, but
-it's not required.</P>
+    <p> Graduate students (or students who are taking this course for
+    graduate credit) must do the following additional work: </p>
 
-<HR width=50% align=left>
-<H4>Skeleton Code</H4>
+    <ul> <li>Implement the requirements of the <a
+    href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html">Iterator</a>
+    interface.
 
-<P>Skeleton code for this assignment is available from my <A
-HREF="https://github.com/douglascraigschmidt/CS891/tree/master/assignments/assignment1a/">GitHub</a>
-account.  Once you've setup your <A
-HREF="https://about.gitlab.com/">GitLab</a> account you can pull this
-skeleton code in your repository, read it carefully, and complete the
-"TODO" markers. The additional work required by graduate students is
-clearly marked.</P>
+  </ul>
 
-<HR width=50% align=left>
-<H4>Concluding Remarks</H4>
+  <p> As much as possible, you should avoid using loops in this
+    assignment and instead try to use <CODE>Arrays.copyOf()</CODE>
+    and/or <CODE>System.arraycopy()</CODE> (this isn't possible for
+    all parts of the code, of course).  </p>
 
-<P>This assignment is designed to help you get familiar with writing
-multi-threaded programs using the Android Studio IDE and core Java
-concurrency mechanisms.  It doesn't require you to program any Java
-synchronization mechanisms (which we'll cover in the next parts of
-this assignment) or Android concurrency/communication frameworks
-(which we'll cover in upcoming assignments).</P>
+  <hr width=50% align=left> <h4>Skeleton Code</h4>
 
-</body>
-</html>
+  <p> Skeleton code for this assignment is available <a
+    href="https://github.com/douglascraigschmidt/CS891/tree/master/assignments/assignment1a/">here</a>
+    in my GitHub account.  After you've setup your <a
+    href="https://about.gitlab.com/">GitLab</a> account you can pull
+    this skeleton code in your repository, read it carefully, and
+    complete the "TODO" markers.  The additional work required by
+    graduate students is clearly marked.  </p>
+
+  <hr width=50% align=left> <h4>Unit Tests</h4>
+
+  <p> JUnit unit tests in the
+  <code>image-crawler/src/test/java/edu/vanderbilt/imagecrawler</code>
+  folder are provided to increase our confidence that your
+  implementation is working as expected.  You'll need to learn how to
+  use the Android Studio GUI to run the JUnit test locally on your
+  computer, as described <A
+  HREF="https://developer.android.com/training/testing/unit-testing/local-unit-tests.html#run">here</a>.
+  As usual, testing only demonstrates the presence of bugs, not their
+  absence, so don't rely solely on the JUnit tests to detect problems
+  in your code. </p>
+
+  <hr width=50% align=left> <h4>Concluding Remarks</h4> <p>
+
+    This assignment is intentionally designed to be easy to help you
+    get familiar with installing/using Java and Android Studio.  If
+    you find it's extremely hard to complete this assignment you may
+    not be ready to take this class.  If this is the case, please meet
+    with me ASAP to discuss other options. <p>
+    
+</body> </html>

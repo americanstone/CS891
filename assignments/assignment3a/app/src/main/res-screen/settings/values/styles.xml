@@ -17,7 +17,7 @@
     </style>
 
     <style name="Widget.Settings.RowValue" parent="Widget.Settings.RowWidget">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Widget.Settings.Title" parent="None">
@@ -30,9 +30,6 @@
 
     <style name="Widget.Settings.TextStyle" parent="None">
         <!--<item name="android:textColor">?android:attr/textColorPrimaryInverse</item>-->
-    </style>
-    <style name="Widget.Settings.SeekBar" parent="None">
-        <item name="android:layout_gravity">center_vertical</item>
     </style>
 
     <style name="Widget.Settings.Header" parent="None">

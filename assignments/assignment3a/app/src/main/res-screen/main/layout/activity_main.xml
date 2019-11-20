@@ -12,18 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!--
-    Pull out doesn't size correctly with width = "wrap_content"
-    so force size to a visually pleasing width (320dp).
-    -->
+    <!--android:layout_width="wrap_content"-->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
-        android:background="@android:color/transparent">
-
+        android:layout_gravity="end">
         <ScrollView
             android:id="@+id/debug_drawer"
             android:layout_width="match_parent"
@@ -34,7 +30,7 @@
 
             <fragment
                 android:id="@+id/settingsFragment"
-                android:name="edu.vandy.app.ui.screens.settings.SettingsDialogFragment"
+                android:name="edu.vanderbilt.crawler.ui.screens.settings.SettingsDialogFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </ScrollView>

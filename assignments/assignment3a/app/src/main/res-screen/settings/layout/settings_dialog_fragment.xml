@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/gridLayout"
+    android:id="@+id/settingsGridLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:alpha=".9"
@@ -10,6 +9,7 @@
     android:columnCount="2"
     android:padding="12dp"
     tools:ignore="UselessParent">
+    <!--android:layout_width="match_parent"-->
 
     <LinearLayout
         android:layout_width="0dp"
@@ -35,171 +35,107 @@
                 style="@style/Widget.Settings.SubTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/simulation_settings" />
+                android:text="@string/development_settings" />
         </LinearLayout>
 
         <ImageView
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/ring" />
+            android:src="@mipmap/ic_launcher_ladybug_round" />
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/settingsModelParametersGroup"
+        android:id="@+id/settings_crawler_configuration_group"
         style="@style/Widget.Settings.Header"
         android:layout_width="0dp"
         android:layout_columnSpan="2"
         android:layout_gravity="start|fill_horizontal"
-        android:text="Model Parameters" />
+        android:text="Crawler Configuration" />
 
     <TextView
-        android:id="@+id/settingsBeingManagerTypeLabel"
         style="@style/Widget.Settings.RowTitle"
         android:layout_gravity="start|center_vertical"
-        android:text="Being Mgr" />
+        android:text="Mode" />
+
+    <RadioGroup
+        android:id="@+id/settingsImageSourceRadioGroup"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start|center_vertical|fill_horizontal"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/settingsLocalCrawl"
+            style="@style/Widget.Settings.TextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Local" />
+
+        <RadioButton
+            android:id="@+id/settingsRemoteCrawl"
+            style="@style/Widget.Settings.TextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Remote" />
+    </RadioGroup>
+
+    <TextView
+        style="@style/Widget.Settings.RowTitle"
+        android:layout_gravity="start|center_vertical"
+        android:text="Strategy" />
 
     <Spinner
-        android:id="@+id/settingsBeingManagerType"
+        android:id="@+id/settingsCrawlStrategy"
         android:layout_width="0dp"
         android:layout_gravity="start|center_vertical|fill_horizontal" />
 
     <TextView
-        android:id="@+id/settingsPalantirManagerTypeLabel"
         style="@style/Widget.Settings.RowTitle"
         android:layout_gravity="start|center_vertical"
-        android:text="Palantiri" />
+        android:text="Depth" />
 
     <Spinner
-        android:id="@+id/settingsPalantiriManagerType"
+        android:id="@+id/settingsCrawlDepth"
         android:layout_width="0dp"
         android:layout_gravity="start|center_vertical|fill_horizontal" />
 
     <TextView
-        android:id="@+id/settingsBeingsLabel"
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_gravity="start|center_vertical"
-        android:text="Beings" />
+        android:id="@+id/settingsTransformsGroup"
+        style="@style/Widget.Settings.Header"
+        android:layout_width="0dp"
+        android:layout_columnSpan="2"
+        android:layout_gravity="start|fill_horizontal"
+        android:text="Transforms" />
 
     <LinearLayout
-        android:id="@+id/settingsBeingsLayout"
+        android:id="@+id/transformsLayoutView"
+        style="@style/Widget.Settings.RowWidget"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical|fill_horizontal"
-        android:orientation="horizontal">
+        android:layout_columnSpan="2"
+        android:orientation="vertical"
+        tools:listitem="@layout/settings_checked_list_item" />
 
-        <SeekBar
-            android:id="@+id/settingsBeingsSeekBar"
-            style="@style/Widget.Settings.RowWidget"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical|fill_horizontal"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/settingsBeingsValue"
-            style="@style/Widget.Settings.RowTitle"
-            android:layout_width="@dimen/settingsSeekBarValue"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            tools:text="00" />
-    </LinearLayout>
+    <!--<edu.vanderbilt.crawler.ui.views.NoScrollListView-->
+    <!--android:id="@+id/transformsListView"-->
+    <!--style="@style/Widget.Settings.RowWidget"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_columnSpan="2"-->
+    <!--tools:listitem="@layout/settings_checked_list_item" />-->
 
     <TextView
-        android:id="@+id/settingsPalantirLabel"
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_width="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:text="Palantiri" />
-
-    <LinearLayout
-        android:id="@+id/settingsPalantirLayout"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical|fill_horizontal"
-        android:orientation="horizontal">
-
-        <SeekBar
-            android:id="@+id/settingsPalantirSeekBar"
-            style="@style/Widget.Settings.RowWidget"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical|fill_horizontal"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/settingsPalantirValue"
-            style="@style/Widget.Settings.RowTitle"
-            android:layout_width="@dimen/settingsSeekBarValue"
-            android:layout_height="wrap_content"
-            tools:text="0" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/settingsIterationsLabel"
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_width="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:text="Iterations" />
-
-    <LinearLayout
-        android:id="@+id/settingsIterationsLayout"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical|fill_horizontal"
-        android:orientation="horizontal">
-
-        <SeekBar
-            android:id="@+id/settingsIterationsSeekBar"
-            style="@style/Widget.Settings.RowWidget"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical|fill_horizontal"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/settingsIterationsValue"
-            style="@style/Widget.Settings.RowTitle"
-            android:layout_width="@dimen/settingsSeekBarValue"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            tools:text="0" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/settingsAppearanceGroup"
+        android:id="@+id/settings_appearance_group"
         style="@style/Widget.Settings.Header"
         android:layout_width="0dp"
         android:layout_columnSpan="2"
         android:layout_gravity="start|fill_horizontal"
         android:text="Appearance" />
-
-    <TextView
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_gravity="start|center_vertical"
-        android:text="Being" />
-
-    <Spinner
-        android:id="@+id/settingsBeingSprite"
-        android:layout_width="0dp"
-        android:layout_gravity="start|center_vertical|fill_horizontal" />
-
-    <TextView
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_gravity="start|center_vertical"
-        android:text="Paths" />
-
-    <Switch
-        android:id="@+id/settingsShowPaths"
-        style="@style/Widget.Settings.RowWidget"
-        android:layout_gravity="start|center_vertical" />
-
-    <TextView
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_gravity="start|center_vertical"
-        android:text="States" />
-
-    <Switch
-        android:id="@+id/settingsShowStates"
-        style="@style/Widget.Settings.RowWidget"
-        android:layout_gravity="start|center_vertical" />
 
     <TextView
         style="@style/Widget.Settings.RowTitle"
@@ -212,287 +148,83 @@
         android:layout_gravity="start|center_vertical" />
 
     <TextView
-        android:id="@+id/settingsScalingGroup"
+        style="@style/Widget.Settings.RowTitle"
+        android:layout_gravity="start|center_vertical"
+        android:text="Size" />
+
+    <Switch
+        android:id="@+id/settingsShowSize"
+        style="@style/Widget.Settings.RowWidget"
+        android:layout_gravity="start|center_vertical" />
+
+    <TextView
+        style="@style/Widget.Settings.RowTitle"
+        android:layout_gravity="start|center_vertical"
+        android:text="State" />
+
+    <Switch
+        android:id="@+id/settingsShowState"
+        style="@style/Widget.Settings.RowWidget"
+        android:layout_gravity="start|center_vertical" />
+
+    <TextView
+        style="@style/Widget.Settings.RowTitle"
+        android:layout_gravity="start|center_vertical"
+        android:text="Thread" />
+
+    <Switch
+        android:id="@+id/settingsShowThread"
+        style="@style/Widget.Settings.RowWidget"
+        android:layout_gravity="start|center_vertical" />
+
+    <TextView
+        android:id="@+id/viewScaleLabel"
+        style="@style/Widget.Settings.RowTitle"
+        android:layout_width="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:text="Zoom" />
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical|fill_horizontal"
+        android:orientation="horizontal">
+
+        <SeekBar
+            android:id="@+id/viewScaleSeekBar"
+            style="@style/Widget.Settings.RowWidget"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical|fill_horizontal"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/settings_crawler_speed_group"
         style="@style/Widget.Settings.Header"
         android:layout_width="0dp"
         android:layout_columnSpan="2"
         android:layout_gravity="start|fill_horizontal"
-        android:text="Scaling" />
+        android:text="Crawl Speed" />
 
     <TextView
-        android:id="@+id/settingsViewAutoScaleLabel"
         style="@style/Widget.Settings.RowTitle"
-        android:layout_width="wrap_content"
         android:layout_gravity="start|center_vertical"
-        android:text="Auto" />
+        android:text="Speed" />
 
-    <Switch
-        android:id="@+id/settingsAutoScale"
+    <SeekBar
+        android:id="@+id/speedSeekBar"
         style="@style/Widget.Settings.RowWidget"
-        android:layout_gravity="start|center_vertical" />
-
-    <TextView
-        android:id="@+id/settingsBeingSizeLabel"
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_width="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:text="Beings" />
-
-    <LinearLayout
-        android:id="@+id/settingsBeingSizeLayout"
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical|fill_horizontal"
-        android:orientation="horizontal">
-
-        <SeekBar
-            android:id="@+id/settingsBeingSizeSeekBar"
-            style="@style/Widget.Settings.RowWidget"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical|fill_horizontal"
-            android:layout_weight="1" />
-
-        <!-- Currently disabled since DP's are not meaninful to typical user. -->
-        <TextView
-            android:id="@+id/settingsBeingSizeValue"
-            style="@style/Widget.Settings.RowTitle"
-            android:layout_width="@dimen/settingsSeekBarValue"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:visibility="gone"
-            tools:text="0" />
-    </LinearLayout>
+        android:max="100" />
 
     <TextView
-        android:id="@+id/settingsPalantirSizeLabel"
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_width="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:text="Palantiri" />
-
-    <LinearLayout
-        android:id="@+id/settingsPalantirSizeLayout"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical|fill_horizontal"
-        android:orientation="horizontal">
-
-        <SeekBar
-            android:id="@+id/settingsPalantirSizeSeekBar"
-            style="@style/Widget.Settings.RowWidget"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical|fill_horizontal"
-            android:layout_weight="1" />
-
-        <!-- Currently disabled since DP's are not meaninful to typical user. -->
-        <TextView
-            android:id="@+id/settingsPalantirSizeValue"
-            style="@style/Widget.Settings.RowTitle"
-            android:layout_width="@dimen/settingsSeekBarValue"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:visibility="gone"
-            tools:text="0" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/settingsStateSizeLabel"
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_width="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:text="States" />
-
-    <LinearLayout
-        android:id="@+id/settingsStateSizeLayout"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical|fill_horizontal"
-        android:orientation="horizontal">
-
-        <SeekBar
-            android:id="@+id/settingsStateSizeSeekBar"
-            style="@style/Widget.Settings.RowWidget"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical|fill_horizontal"
-            android:layout_weight="1" />
-
-        <!-- Currently disabled since DP's are not meaninful to typical user. -->
-        <TextView
-            android:id="@+id/settingsStateSizeValue"
-            style="@style/Widget.Settings.RowTitle"
-            android:layout_width="@dimen/settingsSeekBarValue"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:visibility="gone"
-            tools:text="0" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/settingsSimulationSpeed"
-        style="@style/Widget.Settings.Header"
-        android:layout_width="0dp"
-        android:layout_columnSpan="2"
-        android:layout_gravity="start|fill_horizontal"
-        android:text="Simulation Speed" />
-
-    <TextView
-        android:id="@+id/settingsAnimationSpeedLabel"
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_width="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:text="Animations (%)" />
-
-    <LinearLayout
-        android:id="@+id/settingsAnimationSpeedLayout"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical|fill_horizontal"
-        android:orientation="horizontal">
-
-        <SeekBar
-            android:id="@+id/settingsAnimationSpeedSeekBar"
-            style="@style/Widget.Settings.RowWidget"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical|fill_horizontal"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/settingsAnimationSpeedValue"
-            style="@style/Widget.Settings.RowTitle"
-            android:layout_width="30sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/settingsGazingDurationLabel"
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_width="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:text="Gazing (msec)" />
-
-    <LinearLayout
-        android:id="@+id/settingsGazingDurationLayout"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|fill_horizontal"
-        android:orientation="horizontal">
-
-        <!--
-        This custom widget is typical for custom widgets. They never
-        do it right. This one's layout behaviour doesn't conform with the
-        standard SeekBar layout behaviour. This requires a number of stupid
-        customizations to get it to behave like a normal Android SeekBar.
-        ARGGGH... AMATEURS!
-        -->
-
-        <TextView
-            android:id="@+id/settingsGazingDurationMinValue"
-            style="@style/Widget.Settings.RowTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="0dp"
-            android:paddingEnd="0dp"
-            android:paddingStart="0dp"
-            android:translationX="16dp"
-            android:visibility="gone"
-            tools:text="00" />
-
-        <io.apptik.widget.MultiSlider
-            android:id="@+id/settingsGazingDurationSeekBar"
-            style="@style/Widget.Settings.SeekBar"
-            android:layout_width="111dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="7.3dp"
-            android:layout_marginTop="4dp"
-            android:padding="0dp"
-            android:paddingEnd="0dp"
-            android:paddingStart="0dp" />
-
-        <TextView
-            android:id="@+id/settingsGazingDurationValue"
-            style="@style/Widget.Settings.RowTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="0dp"
-            android:lines="1"
-            android:paddingEnd="0dp"
-            android:paddingStart="0dp" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/settingsPerformanceModeLabel"
         style="@style/Widget.Settings.RowTitle"
         android:layout_gravity="start|center_vertical"
-        android:text="Performance" />
+        android:text="Speed bar" />
 
     <Switch
-        android:id="@+id/settingsPerformanceMode"
-        style="@style/Widget.Settings.RowWidget"
-        android:layout_gravity="start|center_vertical" />
-
-    <TextView
-        android:id="@+id/settingsSimulationDebugging"
-        style="@style/Widget.Settings.Header"
-        android:layout_width="0dp"
-        android:layout_columnSpan="2"
-        android:layout_gravity="start|fill_horizontal"
-        android:text="Debugging" />
-
-    <TextView
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_gravity="start|center_vertical"
-        android:text="Wire Frames" />
-
-    <Switch
-        android:id="@+id/settingsShowWireFrames"
-        style="@style/Widget.Settings.RowWidget"
-        android:layout_gravity="start|center_vertical" />
-
-    <TextView
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_gravity="start|center_vertical"
-        android:text="Sprites" />
-
-    <Switch
-        android:id="@+id/settingsShowSprites"
-        style="@style/Widget.Settings.RowWidget"
-        android:layout_gravity="start|center_vertical" />
-
-    <TextView
-        android:id="@+id/settingsModelCheckerLabel"
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_gravity="start|center_vertical"
-        android:text="Model Checker" />
-
-    <Switch
-        android:id="@+id/settingsModelChecker"
-        style="@style/Widget.Settings.RowWidget"
-        android:layout_gravity="start|center_vertical" />
-
-    <TextView
-        android:id="@+id/settingsStrictModeLabel"
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_gravity="start|center_vertical"
-        android:text="Strict Mode" />
-
-    <Switch
-        android:id="@+id/settingsStrictMode"
-        style="@style/Widget.Settings.RowWidget"
-        android:layout_gravity="start|center_vertical" />
-
-    <TextView
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_gravity="start|center_vertical"
-        android:text="Logging" />
-
-    <Switch
-        android:id="@+id/settingsLogging"
+        android:id="@+id/settingsShowSpeedBar"
         style="@style/Widget.Settings.RowWidget"
         android:layout_gravity="start|center_vertical" />
 
@@ -505,53 +237,41 @@
         android:text="Settings Panel" />
 
     <TextView
-        android:id="@+id/settingsViewTransparencyLabel"
+        android:id="@+id/viewTransparencyLabel"
         style="@style/Widget.Settings.RowTitle"
         android:layout_width="wrap_content"
         android:layout_gravity="start|center_vertical"
         android:text="Transparency" />
 
     <LinearLayout
-        android:id="@+id/settingsViewTransparencyLayout"
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical|fill_horizontal"
         android:orientation="horizontal">
 
         <SeekBar
-            android:id="@+id/settingsViewTransparencySeekBar"
+            android:id="@+id/viewTransparencySeekBar"
             style="@style/Widget.Settings.RowWidget"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical|fill_horizontal"
             android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/settingsViewTransparencyValue"
-            style="@style/Widget.Settings.RowTitle"
-            android:layout_width="30sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical" />
     </LinearLayout>
 
     <TextView
-        style="@style/Widget.Settings.RowTitle"
-        android:layout_gravity="start|center_vertical"
-        android:text="Save On Exit" />
-
-    <Switch
-        android:id="@+id/settingsSaveOnExit"
-        style="@style/Widget.Settings.RowWidget"
-        android:layout_gravity="start|center_vertical" />
+        android:id="@+id/settings_debug_configuration_group"
+        style="@style/Widget.Settings.Header"
+        android:layout_width="0dp"
+        android:layout_columnSpan="2"
+        android:layout_gravity="start|fill_horizontal"
+        android:text="Debug Configuration" />
 
     <TextView
         style="@style/Widget.Settings.RowTitle"
         android:layout_gravity="start|center_vertical"
-        android:text="Defaults" />
+        android:text="Logging" />
 
-    <Button
-        android:id="@+id/settingsResetToDefaults"
+    <Switch
+        android:id="@+id/settingsDebugOutput"
         style="@style/Widget.Settings.RowWidget"
-        android:layout_gravity="start|center_vertical"
-        android:text="Reset" />
-
+        android:layout_gravity="start|center_vertical" />
 </GridLayout>
