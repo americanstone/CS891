@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class ExecutorCompletionServiceMgr
         extends BeingManager<BeingCallable> {
-    /**
+     /**
      * Used for Android debugging.
      */
     private final static String TAG =
@@ -201,3 +201,4 @@ public class ExecutorCompletionServiceMgr
                 + getBeingCount() + " running beings.");
     }
 }
+

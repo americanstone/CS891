@@ -5,6 +5,7 @@ import android.util.Log;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -15,6 +16,9 @@ import java.util.stream.Stream;
 import edu.vandy.simulator.managers.palantiri.Palantir;
 import edu.vandy.simulator.managers.palantiri.PalantiriManager;
 import edu.vandy.simulator.utils.Assignment;
+
+import static java.util.stream.Collectors.toConcurrentMap;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * Defines a mechanism that mediates concurrent access to a fixed
@@ -85,13 +89,19 @@ public class ConcurrentMapFairSemaphoreMgr
         // a FairSemaphoreMO.
 
         // TODO -- you fill in here.
+        mPalantiriMap = getPalantiri().stream().collect(toConcurrentMap(Function.identity(), p -> true));
 
         // Initialize the Semaphore to use a "fair" implementation
         // that mediates concurrent access to the given Palantiri.
         // Grad students must use a FairSemaphoreCO, whereas ugrad
         // students must use a FairSemaphoreMO.
         if (Assignment.isUndergraduateTodo()) {
+            mAvailablePalantiri = new FairSemaphoreMO(getPalantirCount());
+
         } else if (Assignment.isGraduateTodo()) {
+
+            mAvailablePalantiri = new FairSemaphoreCO(getPalantirCount());
+
         }
     }
 
@@ -110,6 +120,21 @@ public class ConcurrentMapFairSemaphoreMgr
         // and then return that palantir to the client.  There should
         // be *no* synchronizers in this method.
         // TODO -- you fill in here.
+        try {
+            mAvailablePalantiri.acquire();
+        } catch (InterruptedException e) {
+            throw new CancellationException();
+        }
+
+        Palantir result = null;
+        for(Palantir palantir : mPalantiriMap.keySet()){
+            if(mPalantiriMap.replace(palantir, true, false)){
+                result = palantir;
+                break;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -124,6 +149,13 @@ public class ConcurrentMapFairSemaphoreMgr
         // properly.  There should be *no* synchronizers in this
         // method.
         // TODO -- you fill in here.
+        if (palantir != null) {
+//            if (mPalantiriMap.put(palantir, true)) {
+//                mAvailablePalantiri.release();
+//            }
+            mPalantiriMap.put(palantir, true);
+            mAvailablePalantiri.release();
+        }
     }
 
     /*

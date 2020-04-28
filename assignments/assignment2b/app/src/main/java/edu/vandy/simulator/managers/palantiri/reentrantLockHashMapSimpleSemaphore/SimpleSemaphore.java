@@ -20,7 +20,7 @@ public class SimpleSemaphore {
      * Define a ReentrantLock to protect critical sections.
      */
     // TODO - you fill in here
-      ReentrantLock lock;
+      Lock lock;
     /**
      * Define a Condition that's used to wait while the number of
      * permits is 0.
@@ -52,7 +52,6 @@ public class SimpleSemaphore {
      */
     public void acquire()
         throws InterruptedException {
-        final ReentrantLock lock = this.lock;
         // TODO -- you fill in here, make sure the lock is always
         // released, e.g., even if an exception occurs.
         try{
@@ -103,7 +102,6 @@ public class SimpleSemaphore {
             notEmpty.signal();
             //notEmpty.signalAll();
         }catch (InterruptedException e){
-            lock.unlock();
         }finally {
             lock.unlock();
         }

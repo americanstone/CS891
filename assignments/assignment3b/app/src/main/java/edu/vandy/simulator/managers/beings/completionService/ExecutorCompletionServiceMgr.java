@@ -1,6 +1,8 @@
 package edu.vandy.simulator.managers.beings.completionService;
 
+import java.util.List;
 import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -10,8 +12,10 @@ import java.util.function.Supplier;
 import edu.vandy.simulator.Controller;
 import edu.vandy.simulator.managers.beings.BeingManager;
 import edu.vandy.simulator.utils.Assignment;
+import edu.vandy.simulator.utils.ExceptionUtils;
 
 import static edu.vandy.simulator.utils.ExceptionUtils.rethrowSupplier;
+import static java.util.stream.Collectors.toList;
 
 /**
  * This BeingManager implementation uses the Java
@@ -30,13 +34,13 @@ public class ExecutorCompletionServiceMgr
      * The ExecutorService contains a cached pool of threads.
      */
     // TODO -- you fill in here.
-
+    private ExecutorService mExecutorService;
     /**
      * The CompletionService that's associated with the
      * ExecutorService above.
      */
     // TODO -- you fill in here.
-
+    CompletionService<BeingCallable> mCompletionService;
     /**
      * Default constructor.
      */
@@ -63,7 +67,7 @@ public class ExecutorCompletionServiceMgr
         // Return a new BeingCallable instance.
         // TODO -- you fill in here, replacing null with the
         // appropriate code.
-        return null;
+        return new BeingCallable(this);
     }
 
     /**
@@ -76,13 +80,15 @@ public class ExecutorCompletionServiceMgr
         // a pool of threads that represent the beings in this
         // simulation.
         // TODO -- you fill in here.
+        beginBeingThreadPool();
 
         // Call a method that waits for all futures to complete.
         // TODO -- you fill in here.
-
-        // Call this class's shutdownNow() method to cleanly shutdown
-        // the executor service.
+        awaitCompletionOfFutures();
+        // Call this classes ExecutorServiceMgr shutdownNow() method
+        // to cleanly shutdown the executor service.
         // TODO -- you fill in here.
+        shutdownNow();
     }
 
     /**
@@ -93,7 +99,7 @@ public class ExecutorCompletionServiceMgr
      */
     public ExecutorService createExecutorService() {
         // TODO -- you fill in here (replace null with an executor service instance).
-        return null;
+        return Executors.newCachedThreadPool();
     }
 
     /**
@@ -106,7 +112,7 @@ public class ExecutorCompletionServiceMgr
             ExecutorService executorService) {
         // TODO -- you fill in here (replace null with an executor
         // completion service instance).
-        return null;
+        return new ExecutorCompletionService(executorService);
     }
 
     /**
@@ -120,6 +126,11 @@ public class ExecutorCompletionServiceMgr
         // BeingCallable to the ExecutorCompletionService.
 
         // TODO -- you fill in here.
+        mExecutorService = createExecutorService();
+        mCompletionService = createExecutorCompletionService(mExecutorService);
+        List<Future<BeingCallable>> xxx = this.getBeings().stream()
+                .map(mCompletionService::submit)
+                .collect(toList());
     }
 
     /**
@@ -141,11 +152,28 @@ public class ExecutorCompletionServiceMgr
         // for a try/catch block to handle checked exceptions. Make
         // sure that your solution does not contain any try/catch blocks.
 
-        // TODO -- you fill in here.
-
         if (Assignment.isUndergraduateTodo()) {
+            // TODO -- you fill in here.
+            for(int i = 0;  i < getBeingCount(); i++){
+                try {
+                    Future<BeingCallable> result = mCompletionService.take();
+                    BeingCallable bc = result.get();
+                    Controller.log(TAG, bc);
+                } catch (RuntimeException | InterruptedException | ExecutionException e) {
+                    Controller.log(TAG,  e);
+                    break;
+                }
+            }
+
         } else if (Assignment.isGraduateTodo()) {
-        } else {
+            // TODO -- you fill in here.
+            for(int i = 0;  i < getBeingCount(); i++){
+                Future<BeingCallable> result = ExceptionUtils.uncheck(() -> mCompletionService.take());
+                BeingCallable bc = ExceptionUtils.uncheck(() -> result.get());
+                Controller.log(TAG, bc);
+            }
+        }
+        else {
             throw new IllegalStateException("Invalid assignment type");
         }
 
@@ -166,9 +194,10 @@ public class ExecutorCompletionServiceMgr
 
         // Shutdown the executor *now*.
         // TODO -- you fill in here.
-
+        mExecutorService.shutdownNow();
         Controller.log(TAG + ": shutdownNow: exited with "
                 + getRunningBeingCount() + "/"
                 + getBeingCount() + " running beings.");
     }
 }
+

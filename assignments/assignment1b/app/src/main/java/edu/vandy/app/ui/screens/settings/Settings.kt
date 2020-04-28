@@ -28,7 +28,7 @@ object Settings {
      * discretion, but it's better to bump up the version than to
      * get unpredictable results or worse, crashes.
      */
-    private val VERSION = 2.0f // Assignment 1b is version 2
+    private val VERSION = 5.0f // Assignment 1b is version 2
 
     /**
      * Preference keys defined for other classes to connect to.

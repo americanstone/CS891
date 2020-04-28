@@ -30,7 +30,7 @@ object Settings {
      */
     //private val VERSION = 2.1f // Assignment 1b is version 2.1f
     //private val VERSION = 3.1f // Assignment 2a is version 3.1f
-    private val VERSION = 3.2f // Assignment 2b is version 3.2f
+    private val VERSION = 6.2f // Assignment 2b is version 3.2f
 
     /**
      * Preference keys defined for other classes to connect to.
@@ -295,7 +295,7 @@ object Settings {
 
             // Restore save on exit flag.
             saveOnExit = oldSaveOnExit
-        } else if (version > VERSION) {
+        } else if (version > VERSION) {//3.2f
             error("The saved settings version ($version) should " +
                   "never be less than the compiled VERSION value $VERSION")
         }
