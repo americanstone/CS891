@@ -13,6 +13,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'edu.vanderbilt.grader:gradle-plugin:1.4.6203-SNAPSHOT'
+        classpath 'edu.vanderbilt.grader:gradle-plugin:+'
     }
 }

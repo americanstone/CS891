@@ -1,10 +1,7 @@
-README-2b.html
-image-crawler/src/main/java/edu/vanderbilt/imagecrawler/crawlers/ParallelStreamsCrawler1.java
-image-crawler/src/main/java/edu/vanderbilt/imagecrawler/utils/ArrayCollector.java
+README-2B.html
 
-app/src/androidTest/java/assignmentTests/Assignment2bTests.kt
-image-crawler/src/test/java/assignmentTests/optionalTests/ParallelStreams1LocalCrawlTest.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/crawlers/ParallelStreamsCrawler1Tests.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/ArrayCollectorTestsBase.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/ArrayCollectorTestsForGrads.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/ArrayCollectorTestsForUndergrads.kt
+app/src/main/java/edu/vandy/simulator/managers/palantiri/reentrantLockHashMapSimpleSemaphore
+
+app/src/androidTest/java/edu/vandy/app/ui/screens/main/Assignment_2B_InstrumentedTests.kt
+app/src/test/java/edu/vandy/simulator/Assignment_2B_IntegratedTest.kt
+app/src/test/java/edu/vandy/simulator/managers/palantiri/reentrantLockHashMapSimpleSemaphore

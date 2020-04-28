@@ -4,19 +4,31 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    compileSdkVersion versions.compileSdk
+
     defaultConfig {
-        applicationId "edu.vanderbilt.androidimagecrawler"
+        applicationId "edu.vandy.palantirisimulator"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
     }
 
     sourceSets {
@@ -29,62 +41,52 @@ android {
                     .each { res.srcDirs += it.path }
         }
     }
-
-    lintOptions {
-        // Not sure why I had this.
-        // Try without for a while and remove if no longer needed (aug 28, 20018).
-        // disable 'PrivateResource'
-        abortOnError false
-    }
-
-    // Shows nicer terminal output when running tests through gradle on the command line.
-    testOptions.unitTests.all {
-        testLogging {
-            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
-            outputs.upToDateWhen { false }
-            showStandardStreams = true
-        }
-    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':image-crawler')
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
-    implementation "androidx.annotation:annotation:$versions.support"
-    implementation "androidx.appcompat:appcompat:$versions.support"
-    implementation "androidx.legacy:legacy-support-v4:$versions.support"
-    implementation "androidx.recyclerview:recyclerview:$versions.support"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
-    implementation "androidx.lifecycle:lifecycle-extensions:$versions.arch_components"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$versions.arch_components"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.viewmodel_ktx"
-    implementation "androidx.core:core-ktx:$versions.support"
+
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+    implementation "androidx.legacy:legacy-support-v4:$versions.supportv4"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintLayout"
+    implementation "androidx.lifecycle:lifecycle-extensions:$versions.archComponents"
+    implementation "androidx.lifecycle:lifecycle-common:$versions.archCommon"
+
     implementation "com.google.android.material:material:$versions.material"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
-    implementation "org.jetbrains.anko:anko-sdk15:$versions.anko"
+    implementation "com.google.code.gson:gson:$versions.gson"
+
     implementation "org.jetbrains.anko:anko-design:$versions.anko"
     implementation "org.jetbrains.anko:anko-common:$versions.anko"
-    implementation "org.jetbrains.anko:anko-coroutines:$versions.anko"
     implementation "org.jetbrains.anko:anko-commons:$versions.anko"
-    implementation "org.jetbrains.anko:anko-recyclerview-v7:$versions.anko"
-    implementation "com.squareup.picasso:picasso:$versions.picasso"
-    implementation "com.github.bumptech.glide:glide:$versions.glide"
-    implementation "com.github.bumptech.glide:okhttp-integration:$versions.okhttp"
-    kapt "com.github.bumptech.glide:compiler:$versions.glide"
-    implementation "com.google.code.gson:gson:$versions.gson"
-    implementation "commons-io:commons-io:$versions.commons_io"
+    implementation "org.jetbrains.anko:anko-sdk25:$versions.anko"
+    implementation "org.jetbrains.anko:anko-appcompat-v7:$versions.anko"
+
+    implementation "org.jetbrains.anko:anko-sdk25-coroutines:$versions.anko"
+    implementation "org.jetbrains.anko:anko-appcompat-v7-coroutines:$versions.anko"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+
     implementation "io.reactivex.rxjava2:rxjava:$versions.rxjava"
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
+
     implementation "com.jakewharton.rxbinding2:rxbinding:$versions.rxbinding"
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leak_canary"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leak_canary"
-    testImplementation "org.mockito:mockito-core:$versions.mockito"
-    testImplementation "junit:junit:$versions.junit"
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
+
+    implementation 'io.apptik.widget:multislider:1.3'
+
+    implementation "com.squareup.picasso:picasso:$versions.picasso"
+
+    implementation "com.github.bumptech.glide:glide:$versions.glide"
+    kapt "com.github.bumptech.glide:compiler:$versions.glide"
+
+    androidTestImplementation "androidx.test:runner:$versions.testRunner"
+    androidTestImplementation "androidx.test:rules:$versions.testRules"
+
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanary"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakCanary"
+
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
-	// Required by Vanderbilt autograder - do not remove
-	testImplementation 'edu.vanderbilt.grader:rubric:1.1'
+    androidTestImplementation 'edu.vanderbilt.grader:rubric:1.1'
+
+    testImplementation "junit:junit:$versions.junit"
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
+    testImplementation 'edu.vanderbilt.grader:rubric:1.1'
 }

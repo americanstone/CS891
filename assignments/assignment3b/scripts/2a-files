@@ -1,13 +1,7 @@
-README-2a.html
-image-crawler/src/main/java/edu/vanderbilt/imagecrawler/crawlers/SequentialStreamsCrawler.java
-image-crawler/src/main/java/edu/vanderbilt/imagecrawler/utils/ArraySpliterator.java
-image-crawler/src/main/java/edu/vanderbilt/imagecrawler/utils/SynchronizedArray.java
-image-crawler/src/main/java/edu/vanderbilt/imagecrawler/utils/UnsynchronizedArray.java
+README-2A.html
 
-app/src/androidTest/java/assignmentTests/Assignment2aTests.kt
-image-crawler/src/test/java/assignmentTests/optionalTests/SequentialStreamsLocalCrawlTest.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/crawlers/SequentialStreamsCrawlerTests.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/SynchronizedArrayTestsBase.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/SynchronizedArrayTestsForGrads.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/UnsynchronizedArraySpliteratorTestsBase.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/UnsynchronizedArraySpliteratorTestsForUndergrads.kt
+app/src/main/java/edu/vandy/simulator/managers/beings/executorService
+
+app/src/androidTest/java/edu/vandy/app/ui/screens/main/Assignment_2A_InstrumentedTests.kt
+app/src/test/java/edu/vandy/simulator/Assignment_2A_IntegratedTest.kt
+app/src/test/java/edu/vandy/simulator/managers/beings/executorService

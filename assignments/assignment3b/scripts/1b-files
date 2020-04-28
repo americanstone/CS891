@@ -1,10 +1,7 @@
-README-1b.html
-image-crawler/src/main/java/edu/vanderbilt/imagecrawler/utils/UnsynchronizedArray.java
+README-1B.html
 
-app/src/androidTest/java/assignmentTests/Assignment1bTests.kt
-image-crawler/src/test/java/assignmentTests/optionalTests/SequentialLoopsLocalCrawlTest.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/UnsynchronizedArrayIteratorTestsBase.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/UnsynchronizedArrayIteratorTestsForUndergrads.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/UnsynchronizedArrayJava8Tests.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/UnsynchronizedArraySpliteratorTestsBase.kt
-image-crawler/src/test/java/edu/vanderbilt/imagecrawler/utils/UnsynchronizedArraySpliteratorTestsForGrads.kt
+app/src/main/java/edu/vandy/simulator/managers/palantiri/spinLockHashMap
+
+app/src/androidTest/java/edu/vandy/app/ui/screens/main/Assignment_1B_InstrumentedTests.kt
+app/src/test/java/edu/vandy/simulator/Assignment_1B_IntegratedTest.kt
+app/src/test/java/edu/vandy/simulator/managers/palantiri/spinLockHashMap
