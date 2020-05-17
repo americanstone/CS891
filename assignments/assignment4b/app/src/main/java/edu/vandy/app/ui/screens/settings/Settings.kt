@@ -35,7 +35,7 @@ object Settings {
     //private val VERSION = 3.1f // Assignment 3a
     //private val VERSION = 3.2f // Assignment 3b
     //private val VERSION = 4.1f // Assignment 4a
-    private val VERSION = 4.2f // Assignment 4b
+    private val VERSION = 11.2f // Assignment 4b
 
     /**
      * Preference keys defined for other classes to connect to.

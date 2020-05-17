@@ -4,9 +4,12 @@ import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Function;
 
@@ -14,6 +17,7 @@ import edu.vandy.simulator.managers.palantiri.Palantir;
 import edu.vandy.simulator.managers.palantiri.PalantiriManager;
 import edu.vandy.simulator.utils.Assignment;
 
+import static java.util.stream.Collectors.toConcurrentMap;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -47,7 +51,8 @@ public class StampedLockFairSemaphoreMgr
     /**
      * A StampedLock synchronizer that protects the Palantiri state.
      */
-    // TODO -- you fill in here.  
+    // TODO -- you fill in here.
+    StampedLock mStampedLock;
 
     /**
      * Zero parameter constructor required for Factory creation.
@@ -91,13 +96,18 @@ public class StampedLockFairSemaphoreMgr
         // stream to initialize mPalantiriMap, whereas ugrad students
         // can implement without using a Java 8 stream.
         // TODO -- you fill in here.
+        mPalantiriMap = getPalantiri().stream().collect(toConcurrentMap(Function.identity(), p -> true));
+        // two steps version
+//        mPalantiriMap = new HashMap<>();
+//        getPalantiri().forEach(p -> mPalantiriMap.put(p, true));
 
         // Initialize the Semaphore to use a "fair" implementation
         // that mediates concurrent access to the given Palantiri.
         // TODO -- you fill in here.
-
+        mAvailablePalantiri = buildFairSemaphore();
         // Initialize the StampedLock.
         // TODO -- you fill in here.
+        mStampedLock = new StampedLock();
     }
 
     /**
@@ -127,12 +137,44 @@ public class StampedLockFairSemaphoreMgr
         // the StampedLock "upgrade" example that's described at
         // docs.oracle.com/javase/8/docs/api/java/util/concurrent/locks/StampedLock.html.
 
-        // TODO -- you fill in here.  
+        // TODO -- you fill in here.
+        try {
+            mAvailablePalantiri.acquire();
+        } catch (InterruptedException e) {
+           throw new CancellationException();
+        }
+
+        Palantir result = null;
+        long stamp= mStampedLock.readLock();
+        try{
+            Iterator<Map.Entry<Palantir, Boolean>> it = mPalantiriMap.entrySet().iterator();
+            while (it.hasNext()){
+                Map.Entry<Palantir, Boolean> entry = it.next();
+                if(entry.getValue()){
+                    long ws = mStampedLock.tryConvertToWriteLock(stamp);
+                    if(ws != 0L){
+                        stamp = ws;
+                        entry.setValue(false);
+                        result = entry.getKey();
+                        break;
+                    }else {
+                        mStampedLock.unlockRead(stamp);
+                        stamp = mStampedLock.writeLock();
+                        it = mPalantiriMap.entrySet().iterator();
+                    }
+                }
+            }
+        }finally {
+            mStampedLock.unlock(stamp);
+        }
+
+
+        return result;
 
         // This method either succeeds by returning a Palantir, or
         // fails if interrupted by a shutdown.  In ether case,
         // reaching this line should not be possible.
-        throw new IllegalStateException("This is not possible");
+        //throw new IllegalStateException("This is not possible");
     }
 
     /**
@@ -145,6 +187,19 @@ public class StampedLockFairSemaphoreMgr
         // in a thread-safe manner using a StampedLock in write-mode
         // and release the FairSemaphore if all works properly.
         // TODO -- you fill in here.
+//        if(mPalantiriMap.get(palantir)){
+        if(palantir != null){
+            long stamp = mStampedLock.writeLock();
+            Boolean updated = mPalantiriMap.put(palantir, true);
+//        if(updated){
+            mStampedLock.unlockWrite(stamp);
+            mAvailablePalantiri.release();
+        }
+
+//        }
+
+//        }
+
     }
 
     /**

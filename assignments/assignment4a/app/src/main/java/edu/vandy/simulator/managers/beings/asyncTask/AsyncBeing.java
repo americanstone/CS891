@@ -54,9 +54,10 @@ class AsyncBeing extends Being {
                            ThreadPoolExecutor threadPoolExecutor) {
         // Create a new async task.
         // TODO -- you fill in here.
-
+        mAsyncTask = createTask(entryBarrier, exitBarrier);
         // Execute the task on the given thread pool.
         // TODO -- you fill in here.
+        mAsyncTask.executeOnExecutor(threadPoolExecutor, getGazingIterations());
     }
 
     /**
@@ -73,7 +74,7 @@ class AsyncBeing extends Being {
                                         CountDownLatch exitBarrier) {
         // TODO -- you fill in here by replacing null with the
         // appropriate code.
-        return null;
+        return new AsyncBeingTask(entryBarrier, exitBarrier);
     }
 
     /**
@@ -86,6 +87,7 @@ class AsyncBeing extends Being {
      */
     public void cancel(boolean mayInterruptIfRunning) {
         // TODO -- you fill in here.
+        mAsyncTask.cancel(mayInterruptIfRunning);
     }
 
     /**
@@ -104,6 +106,21 @@ class AsyncBeing extends Being {
         // a call to the appropriate base class helper method.
 
         // TODO -- you fill in here.
+        try{
+            Palantir palantir = acquirePalantir();
+            if(palantir == null){
+                error("can't acuquirePalantir");
+            }else{
+                try{
+                    palantir.gaze(this);
+                }finally {
+                    releasePalantir(palantir);
+                }
+            }
+        }catch (Exception e){
+            error(e.toString());
+        }
+
     }
 
     /**
@@ -152,6 +169,7 @@ class AsyncBeing extends Being {
             // indicating that this method has been called for this
             // being.
             // TODO -- you fill in here.
+            log(": run being preExecute ");
         }
 
         /**
@@ -163,6 +181,8 @@ class AsyncBeing extends Being {
                 // Don't start gazing until all
                 // BeingAsyncTasks are ready to run.
                 // TODO -- you fill in here.
+                mEntryBarrier.await();
+
             } catch (Exception e) {
                 return "being failed with exception " 
                     + e.getMessage();
@@ -182,9 +202,10 @@ class AsyncBeing extends Being {
         public void onPostExecute(String message) {
             // Print the message via the local log() method method.
             // TODO -- you fill in here.
-
+            log(message);
             // Inform the AsyncTaskMgr that this AsyncTask is done.
             // TODO -- You fill in here.
+            mExitBarrier.countDown();
         }
 
         /**
@@ -196,6 +217,7 @@ class AsyncBeing extends Being {
             // Forward to onPostExecute() to inform the AsyncTaskMgr
             // that this AsyncTask has been cancelled.
             // TODO -- You fill in here.
+            onPostExecute(s);
         }
 
         /**

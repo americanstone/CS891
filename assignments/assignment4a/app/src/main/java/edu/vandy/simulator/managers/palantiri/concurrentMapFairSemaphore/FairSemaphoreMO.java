@@ -21,18 +21,20 @@ public class FairSemaphoreMO
      */
     // TODO -- you fill in here.  Make sure that this field will ensure
     // its values aren't cached by multiple threads..
-
+    private volatile int mAvailablePermits;
     /**
      * Define a LinkedList "WaitQueue" that keeps track of the waiters in a FIFO
      * List to ensure "fair" semantics.
      */
     // TODO -- you fill in here.
-
+    private LinkedList<Waiter> mWaitQueue;
     /**
      * Initialize the fields in the class.
      */
     public FairSemaphoreMO(int availablePermits) {
         // TODO -- you fill in here.
+        this.mAvailablePermits = availablePermits;
+        this.mWaitQueue = new LinkedList<>();
     }
 
     /**
@@ -41,8 +43,22 @@ public class FairSemaphoreMO
      */
     @Override
     public void acquireUninterruptibly() {
-        // TODO -- you fill in here, using a loop to ignore
-        // InterruptedExceptions.
+        // TODO -- you fill in here, using a loop to ignore InterruptedExceptions.
+        for (;;){
+            try{
+                //boolean interrupted = false;
+                acquire();
+                if(Thread.interrupted()){
+                    Thread.currentThread().interrupt();
+                    // interrupted = true;
+                }
+
+                return;
+
+            }catch (Throwable t){
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     /**
@@ -70,8 +86,11 @@ public class FairSemaphoreMO
         // First try the "fast path" where the method doesn't need to
         // block if the queue is empty and permits are available.
         //
-        // TODO -- you fill in here (replacing false with the
+        // TODO -- you fill in here (replace false with the
         // appropriate code).
+        synchronized (this){
+            return tryToGetPermitUnlocked();
+        }
     }
 
     /**
@@ -84,9 +103,13 @@ public class FairSemaphoreMO
     protected boolean tryToGetPermitUnlocked() {
         // We don't need to wait if the queue is empty and
         // permits are available.
-        //
-        // TODO -- you fill in here (replacing false with the
+        // TODO -- you fill in here (replace false with the
         // appropriate code).
+        if(mAvailablePermits > 0 && mWaitQueue.isEmpty()){
+            mAvailablePermits--;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -105,10 +128,29 @@ public class FairSemaphoreMO
     protected void waitForPermit() throws InterruptedException {
         // Call createWaiter helper method to allocate a new Waiter that
         // acts as the "specific-notification lock".
-        final Waiter waiter = createWaiter();
-
+        if(tryToGetPermitUnlocked()){
+            return;
+        }
+        Waiter waiter = createWaiter();
         // TODO -- implement "fair" semaphore acquire semantics using
         // the Specific Notification pattern.
+        synchronized (waiter){
+            synchronized (this){
+                mWaitQueue.add(waiter); // mWaitQueue is protected by the synchronized this
+            };
+            try {
+                waiter.mReleased = false;
+                waiter.wait(); // release the Waiter lock and goes to sleep atomically
+            } catch (InterruptedException e) {
+                // do clean up
+                synchronized (this){
+                    if(!mWaitQueue.remove(waiter)){
+                        release();
+                    }
+                }
+                throw e;
+            }
+        }
     }
 
     /**
@@ -118,8 +160,22 @@ public class FairSemaphoreMO
     public void release() {
         // TODO -- implement "fair" semaphore release semantics
         // using the Specific Notification pattern.
-    }
+        synchronized (this){
+            if(!mWaitQueue.isEmpty()){
+                Waiter waiter = mWaitQueue.remove();
+                synchronized (waiter){
+                    waiter.notify();
+                    waiter.mReleased = true;
+                }
+            }
+            else {
+                mAvailablePermits++;
+            }
+        }
 
+
+
+    }
     /**
      * @return The number of available permits.
      */
@@ -127,7 +183,7 @@ public class FairSemaphoreMO
     public int availablePermits() {
         // @@ TODO -- you fill in here replacing 0 with the right
         // value.
-        return 0;
+        return mAvailablePermits;
     }
 
     /**

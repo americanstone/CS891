@@ -13,6 +13,8 @@ import edu.vandy.simulator.managers.palantiri.Palantir;
 import edu.vandy.simulator.managers.palantiri.PalantiriManager;
 import edu.vandy.simulator.utils.Assignment;
 
+import static java.util.stream.Collectors.toConcurrentMap;
+
 /**
  * Defines a mechanism that mediates concurrent access to a fixed
  * number of available Palantiri.  This class uses a "fair" Semaphore
@@ -82,15 +84,19 @@ public class ConcurrentMapFairSemaphoreMgr
         // a FairSemaphoreMO.
 
         // TODO -- you fill in here.
+        mPalantiriMap = getPalantiri().stream().collect(toConcurrentMap(Function.identity(), p -> true));
 
         // Initialize the Semaphore to use a "fair" implementation
         // that mediates concurrent access to the given Palantiri.
         // Grad students must use a FairSemaphoreCO, whereas ugrad
         // students must use a FairSemaphoreMO.
         if (Assignment.isUndergraduateTodo()) {
-            // TODO -- you fill in here.
+            mAvailablePalantiri = new FairSemaphoreMO(getPalantirCount());
+
         } else if (Assignment.isGraduateTodo()) {
-            // TODO -- you fill in here.
+
+            mAvailablePalantiri = new FairSemaphoreCO(getPalantirCount());
+
         }
     }
 
@@ -108,17 +114,22 @@ public class ConcurrentMapFairSemaphoreMgr
         // key with "false" to indicate the Palantir isn't available
         // and then return that palantir to the client.  There should
         // be *no* synchronizers in this method.
-
-        // Acquire the Semaphore allowing for the premature
-        // termination from an Interrupted exception.
+        // TODO -- you fill in here.
         try {
-            // TODO -- you fill in here.
+            mAvailablePalantiri.acquire();
         } catch (InterruptedException e) {
-            // Wrap the interrupted exception in a
-            // CancellationException and throw.
-            throw new CancellationException(
-                    "ConcurrentFairSemaphoreMgr was interrupted");
+            throw new CancellationException();
         }
+
+        Palantir result = null;
+        for(Palantir palantir : mPalantiriMap.keySet()){
+            if(mPalantiriMap.replace(palantir, true, false)){
+                result = palantir;
+                break;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -131,10 +142,15 @@ public class ConcurrentMapFairSemaphoreMgr
         // Put the "true" value back into ConcurrentHashMap for the
         // palantir key and release the Semaphore if all works
         // properly.  There should be *no* synchronizers in this
-        // method.  Also, make sure to check if the palantir is null
-        // before proceeding..
-
+        // method.
         // TODO -- you fill in here.
+        if (palantir != null) {
+//            if (mPalantiriMap.put(palantir, true)) {
+//                mAvailablePalantiri.release();
+//            }
+            mPalantiriMap.put(palantir, true);
+            mAvailablePalantiri.release();
+        }
     }
 
     /*
@@ -146,8 +162,7 @@ public class ConcurrentMapFairSemaphoreMgr
      * Returns the number of available permits on the semaphore.
      */
     protected int availablePermits() {
-        // TODO -- you fill in here (replace 0 with the proper code).
-        return 0;
+        return mAvailablePalantiri.availablePermits();
     }
 
     /**
