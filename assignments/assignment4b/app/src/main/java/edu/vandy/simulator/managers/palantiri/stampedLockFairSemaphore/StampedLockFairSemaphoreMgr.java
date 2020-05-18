@@ -136,7 +136,7 @@ public class StampedLockFairSemaphoreMgr
         // writelock.  This code is tricky, so please carefully read
         // the StampedLock "upgrade" example that's described at
         // docs.oracle.com/javase/8/docs/api/java/util/concurrent/locks/StampedLock.html.
-
+        // also see  https://www.youtube.com/watch?v=c3_j5cPcRAI&feature=emb_logo
         // TODO -- you fill in here.
         try {
             mAvailablePalantiri.acquire();
@@ -168,7 +168,6 @@ public class StampedLockFairSemaphoreMgr
             mStampedLock.unlock(stamp);
         }
 
-
         return result;
 
         // This method either succeeds by returning a Palantir, or
@@ -187,19 +186,12 @@ public class StampedLockFairSemaphoreMgr
         // in a thread-safe manner using a StampedLock in write-mode
         // and release the FairSemaphore if all works properly.
         // TODO -- you fill in here.
-//        if(mPalantiriMap.get(palantir)){
         if(palantir != null){
             long stamp = mStampedLock.writeLock();
             Boolean updated = mPalantiriMap.put(palantir, true);
-//        if(updated){
             mStampedLock.unlockWrite(stamp);
             mAvailablePalantiri.release();
         }
-
-//        }
-
-//        }
-
     }
 
     /**
